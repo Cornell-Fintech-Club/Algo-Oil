@@ -32,9 +32,14 @@ def format_dataloader(file_path):
         # print([row["Exports"], row["field_prod"], row["imports"], row["net_imports"], row["refiner_input"], row["stocks"], row["Unemployment"], row["snp"], row["vix"], row["wti_prev"]])
         input = torch.FloatTensor(
             [
-                row["Exports"],
+                row["U.S. Exports of Finished Petroleum Products Thousand Barrels per Day"],
                 row["Month"],
                 row["Year"],
+                row["U.S. Product Supplied of Finished Motor Gasoline (Thousand Barrels)"],
+                row["U.S. Electricity Consumption (billion kilowatthours per day)"],
+                row["U.S. Heating Degree Days (degree days)"],
+                row["U.S. Cooling Degree Days (degree days)"]
+
             ]
         )
         label = torch.FloatTensor([row[-3]])
