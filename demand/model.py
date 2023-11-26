@@ -32,6 +32,9 @@ def format_dataloader(file_path):
         # print([row["Exports"], row["field_prod"], row["imports"], row["net_imports"], row["refiner_input"], row["stocks"], row["Unemployment"], row["snp"], row["vix"], row["wti_prev"]])
         input = torch.FloatTensor(
             [
+                row[
+                    "U.S. Exports of Finished Petroleum Products Thousand Barrels per Day"
+                ],
                 row["Month"],
                 row["Year"],
                 row[
@@ -43,11 +46,7 @@ def format_dataloader(file_path):
             ]
         )
         label = torch.FloatTensor(
-            [
-                row[
-                    "U.S. Exports of Finished Petroleum Products Thousand Barrels per Day"
-                ]
-            ]
+            [row["U.S. Crude Oil Production (million barrels per day)"]]
         )
         batch = {"input": input, "label": label}
         dataloader = [batch] + dataloader

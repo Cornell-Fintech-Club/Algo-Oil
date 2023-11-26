@@ -11,7 +11,7 @@ import torch.nn as nn
 
 model_file = False
 # proj_file = "proj_vals.csv"
-input_dim = 6
+input_dim = 7
 hid_dim = 75
 final_dim = 20
 num_layers = 5
@@ -50,8 +50,6 @@ else:
         model = load_model(f"models/oil_ffnn_{n}.pth")
 
         # convert test to a tensor of tensors
-
-        pred_model(model, test)
 
     #     preds[0] += pred_model(model, proj[1]["input"])
     #     for i in range(2, len(proj)):
