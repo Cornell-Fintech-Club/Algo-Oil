@@ -51,11 +51,11 @@ print(gasoline_df)
 #using EIA monthly energy report 
 energy_df = pd.read_csv("datademand/1._U.S._Energy_Markets_Summary.csv", header = None)
 energy_df = energy_df.transpose()
-energy_df = energy_df[[0, 10, 27, 28]]
+energy_df = energy_df[[0, 3, 10, 27, 28]]
 energy_df.drop([0,1,2,3,4 ], axis=0, inplace=True)
-energy_df = energy_df.rename(columns = {0: "Date", 10 : "U.S. Electricity Consumption (billion kilowatthours per day)", 27: 'U.S. Heating Degree Days (degree days)', 28: 'U.S. Cooling Degree Days (degree days)'})
+energy_df = energy_df.rename(columns = {0: "Date", 3: "U.S. Crude Oil Production (million barrels per day)", 10 : "U.S. Electricity Consumption (billion kilowatthours per day)", 27: 'U.S. Heating Degree Days (degree days)', 28: 'U.S. Cooling Degree Days (degree days)'})
 energy_df.drop(5, axis=0, inplace=True)
 energy_df[["Month", "Year"]] = energy_df["Date"].str.split(" ", expand=True)
 energy_df.drop("Date", axis = 1, inplace = True)
-energy_df.to_csv('datademand/cleaned_US_electricity_consumption_HDDCDD')
+energy_df.to_csv('datademand/cleaned_US_electricity_consumption_HDDCDD_crudeprod')
 print(energy_df)

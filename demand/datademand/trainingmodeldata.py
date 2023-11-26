@@ -6,7 +6,7 @@ print(us_exports_df)
 us_motor_df = pd.read_csv("cleaned_US_gasoline_production.csv")
 print(us_motor_df)
 
-us_energy_weather = pd.read_csv('cleaned_US_electricity_consumption_HDDCDD')
+us_energy_weather = pd.read_csv('cleaned_US_electricity_consumption_HDDCDD_crudeprod')
 
 merged_data = pd.merge(us_exports_df, us_motor_df, on=['Year', 'Month'])
 merged_data = pd.merge(merged_data, us_energy_weather, on=['Year', 'Month'])
