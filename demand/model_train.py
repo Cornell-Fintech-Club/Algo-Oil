@@ -11,7 +11,7 @@ import torch.nn as nn
 
 model_file = False
 # proj_file = "proj_vals.csv"
-input_dim = 7
+input_dim = 6
 hid_dim = 75
 final_dim = 20
 num_layers = 5
@@ -29,7 +29,7 @@ loss_fn = nn.L1Loss()
 preds = [0.0 for _ in range(10)]
 
 if not model_file:
-    for n in range(30):
+    for n in range(5):
         model = FFNN(input_dim, hid_dim, final_dim, num_layers)
         optimizer = optim.SGD(model.parameters(), lr=lr)
         train_model(model, train + val, test, num_epochs, optimizer, loss_fn)
@@ -48,6 +48,10 @@ else:
     for n in range(30):
         model = FFNN(input_dim, hid_dim, final_dim, num_layers)
         model = load_model(f"models/oil_ffnn_{n}.pth")
+
+        # convert test to a tensor of tensors
+
+        pred_model(model, test)
 
     #     preds[0] += pred_model(model, proj[1]["input"])
     #     for i in range(2, len(proj)):
