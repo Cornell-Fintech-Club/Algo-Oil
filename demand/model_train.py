@@ -20,9 +20,9 @@ lr = 0.000001
 
 # load data
 # proj = format_dataloader(proj_file)
-train = format_dataloader("datademand/train.csv")
-val = format_dataloader("datademand/val.csv")
-test = format_dataloader("datademand/test.csv")
+train = format_dataloader("demand/cleaned-data/train.csv")
+val = format_dataloader("demand/cleaned-data/val.csv")
+test = format_dataloader("demand/cleaned-data/test.csv")
 
 models = []
 loss_fn = nn.L1Loss()
