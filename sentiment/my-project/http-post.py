@@ -59,10 +59,10 @@ def articles_perweek (queryString, titles, descriptions):
     titles.append(title)
     descriptions.append(description)
     i = i + 1
-  return titles, descriptions
+  
+  print(articles)
 
-#print(titles)
-#print(articles)
+  return titles, descriptions
 
 # Run the function
 titles = []
@@ -71,14 +71,29 @@ descriptions = []
 now = datetime.now()
 start = date(2021, 1, 1)
 
+# oil
 for dt in rrule.rrule(rrule.WEEKLY, dtstart=start, until=now):
   dt_plusweek = dt + timedelta(days=7)
-  queryString = "title:WTI OR title:oil OR title:petroleum OR description:WTI OR description:oil OR description:petroleum OR symbols:WTI AND publishedAt:[" + dt.strftime('%Y-%m-%d') + " TO " + dt_plusweek.strftime('%Y-%m-%d') + "]"
+  queryString = "title:oil AND description:oil AND publishedAt:[" + dt.strftime('%Y-%m-%d') + " TO " + dt_plusweek.strftime('%Y-%m-%d') + "]"
   titles, descriptions = articles_perweek(queryString, titles, descriptions)
   time.sleep(1)
 
-# print(titles)
+# WTI
+for dt in rrule.rrule(rrule.WEEKLY, dtstart=start, until=now):
+  dt_plusweek = dt + timedelta(days=7)
+  queryString1 = "title:WTI AND description:WTI AND publishedAt:[" + dt.strftime('%Y-%m-%d') + " TO " + dt_plusweek.strftime('%Y-%m-%d') + "]"
+  titles1, descriptions1 = articles_perweek(queryString1, titles, descriptions)
+  time.sleep(1)
+
+for dt in rrule.rrule(rrule.WEEKLY, dtstart=start, until=now):
+  dt_plusweek = dt + timedelta(days=7)
+  queryString2 = "title:petroleum AND description:petroleum AND publishedAt:[" + dt.strftime('%Y-%m-%d') + " TO " + dt_plusweek.strftime('%Y-%m-%d') + "]"
+  titles2, descriptions2 = articles_perweek(queryString2, titles, descriptions)
+  time.sleep(1)
+
+#print(titles)
 
 # Export to csv for annotations
-df = pd.DataFrame(descriptions, titles)#
-df.to_csv('article_titles_descriptions.csv')
+df = pd.DataFrame(descriptions, titles)
+df.to_csv('atd_separate.csv')
+# article_titles_descriptions
