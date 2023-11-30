@@ -68,8 +68,8 @@ predictions = model.predict(X_test)
 loss, accuracy = model.evaluate(X_test, y_test)
 print(f'Loss: {loss}, Accuracy: {accuracy}')
 
-# general sentiment - based on predictive probability
-threshold = 0.5 # change?
-predicted_sentiment = np.argmax(predictions, axis=1) if np.max(predictions, axis=1) > threshold else 2
+# general sentiment - based on predictive probability and a threshold?
+# threshold = 0.5 # change?
+# predicted_sentiment = np.argmax(predictions, axis=1) if np.max(predictions, axis=1) > threshold else 2
 
-print("Predicted Sentiment:", predicted_sentiment)
+# print("Predicted Sentiment:", predicted_sentiment)
