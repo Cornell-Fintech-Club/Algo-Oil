@@ -8,14 +8,19 @@ from tensorflow.keras.layers import Embedding, LSTM, Dense, Softmax
 from tensorflow.keras.models import Sequential
 
 # load data
-df = pd.read_csv('/Users/omishasharma/Downloads/atd_separate_reduced_annotated.csv', engine='python')
+df1 = pd.read_csv('/Users/omishasharma/Downloads/atd_separate_reduced_annotated_train.csv', engine='python')
+df2 = pd.read_csv('/Users/omishasharma/Downloads/atd_separate_reduced_annotated_train.csv', engine='python')
 
-# split into text and labels
-X = df["Title"] + " " + df["Description"] # include both title and then description
-Y = df["Label"] # label encoding: 0 as bullish, 1 as bearish, 2 as neutral
+# split train into text and labels
+X_train = df1["Title"] + " " + df1["Description"] # include both title and then description
+y_train = df1["Label"] # label encoding: 0 as bullish, 1 as bearish, 2 as neutral
 
-# split into train and test data
-X_train, other_x, y_train, other_y = train_test_split(X, Y, test_size=0.3, random_state=42)
+# split test into text and labels
+X_test = df2["Title"] + " " + df2["Description"] # include both title and then description
+y_test = df2["Label"] # label encoding: 0 as bullish, 1 as bearish, 2 as neutral
+
+# split into test and val data
+# X_train, other_x, y_train, other_y = train_test_split(X, Y, test_size=0.3, random_state=42)
 X_test, X_val, y_test, y_val = train_test_split(other_x, other_y, test_size=0.33, random_state=42)
 
 # tokenization of train

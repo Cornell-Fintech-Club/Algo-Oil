@@ -26,7 +26,7 @@ def articles_perweek (queryString, titles, descriptions):
   "type": "filterArticles",
   "queryString": queryString,
   "from": 0,
-  "size": 10
+  "size": 8
   # max size for one api call is 50
   }
 
@@ -60,40 +60,52 @@ def articles_perweek (queryString, titles, descriptions):
     descriptions.append(description)
     i = i + 1
   
-  # print(articles)
+  print(articles)
 
   return titles, descriptions
 
 # Run the function
-titles = []
-descriptions = []
+titles_train = []
+descriptions_train = []
+titles_test = []
+descriptions_test = []
 
 now = datetime.now()
 start = date(2022, 1, 1)
+train_end = now - timedelta(days=112)
 
-# oil
-for dt in rrule.rrule(rrule.WEEKLY, dtstart=start, until=now):
+# train
+for dt in rrule.rrule(rrule.WEEKLY, dtstart=start, until=train_end):
   dt_plusweek = dt + timedelta(days=7)
   queryString = "title:oil AND description:oil AND publishedAt:[" + dt.strftime('%Y-%m-%d') + " TO " + dt_plusweek.strftime('%Y-%m-%d') + "]"
-  titles, descriptions = articles_perweek(queryString, titles, descriptions)
+  titles_train, descriptions_train = articles_perweek(queryString, titles_train, descriptions_train)
   time.sleep(1)
-
-# WTI
-for dt in rrule.rrule(rrule.WEEKLY, dtstart=start, until=now):
-  dt_plusweek = dt + timedelta(days=7)
   queryString1 = "title:WTI AND description:WTI AND publishedAt:[" + dt.strftime('%Y-%m-%d') + " TO " + dt_plusweek.strftime('%Y-%m-%d') + "]"
-  titles1, descriptions1 = articles_perweek(queryString1, titles, descriptions)
+  titles_train, descriptions_train = articles_perweek(queryString1, titles_train, descriptions_train)
   time.sleep(1)
-
-for dt in rrule.rrule(rrule.WEEKLY, dtstart=start, until=now):
-  dt_plusweek = dt + timedelta(days=7)
   queryString2 = "title:petroleum AND description:petroleum AND publishedAt:[" + dt.strftime('%Y-%m-%d') + " TO " + dt_plusweek.strftime('%Y-%m-%d') + "]"
-  titles2, descriptions2 = articles_perweek(queryString2, titles, descriptions)
+  titles_train, descriptions_train = articles_perweek(queryString2, titles_train, descriptions_train)
   time.sleep(1)
 
+# oil test
+for dt in rrule.rrule(rrule.WEEKLY, dtstart=train_end, until=now):
+  dt_plusweek = dt + timedelta(days=7)
+  queryString = "title:oil AND description:oil AND publishedAt:[" + dt.strftime('%Y-%m-%d') + " TO " + dt_plusweek.strftime('%Y-%m-%d') + "]"
+  titles_test, descriptions_test = articles_perweek(queryString, titles_test, descriptions_test)
+  time.sleep(1)
+  queryString1 = "title:WTI AND description:WTI AND publishedAt:[" + dt.strftime('%Y-%m-%d') + " TO " + dt_plusweek.strftime('%Y-%m-%d') + "]"
+  titles_test, descriptions_test = articles_perweek(queryString1, titles_test, descriptions_test)
+  time.sleep(1)
+  queryString2 = "title:petroleum AND description:petroleum AND publishedAt:[" + dt.strftime('%Y-%m-%d') + " TO " + dt_plusweek.strftime('%Y-%m-%d') + "]"
+  titles_test, descriptions_test = articles_perweek(queryString2, titles_test, descriptions_test)
+  time.sleep(1)
 #print(titles)
 
-# Export to csv for annotations
-df = pd.DataFrame(descriptions, titles)
-df.to_csv('atd_separate_reduced.csv')
+# Export train to csv for annotations
+df1 = pd.DataFrame(descriptions_train, titles_train)
+df1.to_csv('atd_separate_reduced_train.csv')
 # article_titles_descriptions
+
+# Export test to csv for annotations
+df2 = pd.DataFrame(descriptions_test, titles_test)
+df2.to_csv('atd_separate_reduced_test.csv')
