@@ -15,8 +15,8 @@ X = df["Title"] + " " + df["Description"] # include both title and then descript
 Y = df["Label"] # label encoding: 0 as bullish, 1 as bearish, 2 as neutral
 
 # split into train and test data
-X_train, other_x, y_train, other_y = train_test_split(X, Y, test_size=0.2, random_state=42)
-X_test, X_val, y_test, y_val = train_test_split(other_x, other_y, test_size=0.5, random_state=42)
+X_train, other_x, y_train, other_y = train_test_split(X, Y, test_size=0.3, random_state=42)
+X_test, X_val, y_test, y_val = train_test_split(other_x, other_y, test_size=0.33, random_state=42)
 
 # tokenization of train
 token = Tokenizer()
