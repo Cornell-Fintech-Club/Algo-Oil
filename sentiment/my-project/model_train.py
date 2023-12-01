@@ -8,7 +8,6 @@ from model import (
 )
 
 # parameters
-vocab_size = len(token.word_index) + 1 # might have to put in model itself
 embedding_dim = 50
 max_length = 300
 lr = 0.1
@@ -18,7 +17,7 @@ df1 = pd.read_csv('/Users/omishasharma/Downloads/atd_separate_reduced_annotated_
 df2 = pd.read_csv('/Users/omishasharma/Downloads/atd_separate_reduced_annotated_train.csv', engine='python')
 
 models = []
-loss_fn = nn.L1Loss()
+loss_fn = tf.keras.losses.CategoricalCrossentropy()
 preds = [0.0 for _ in range(10)]
 
 for n in range(5):

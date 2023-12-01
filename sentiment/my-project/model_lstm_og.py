@@ -50,14 +50,13 @@ model.add(Embedding(input_dim=vocab_size, output_dim=embedding_dim, input_length
 
 # LSTM layer 
 model.add(LSTM(100))
-model.add(Dense(1, activation='sigmoid'))
-model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
 # linear layer
 model.add(Dense(units=64, activation='relu'))
 
-# softmax layer
-model.add(Softmax())
+# softmax layer equivalent
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+# model.add(Softmax())
 
 # train model
 X_val = token.texts_to_sequences(X_val)

@@ -28,7 +28,8 @@ class LSTM(tf.keras.Model):
         x = self.dense_layer(x)
 
         # softmax
-        output = tf.nn.softmax(x, axis=-1)  
+        output = model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+        # output = tf.nn.softmax(x, axis=-1)  
 
         return output
 
@@ -161,3 +162,4 @@ def save_model(model, path):
 
 def load_model(path):
     return tf.keras.models.load_model(path)
+
