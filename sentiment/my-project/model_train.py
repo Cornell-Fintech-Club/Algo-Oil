@@ -8,7 +8,7 @@ from model import (
 )
 
 # parameters
-vocab_size = len(token.word_index) + 1
+vocab_size = len(token.word_index) + 1 # might have to put in model itself
 embedding_dim = 50
 max_length = 300
 lr = 0.1
