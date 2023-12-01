@@ -77,7 +77,7 @@ def train_model(
             loss.backward()
             optimizer.step()
 
-        print(f"Training Loss: {total_loss / total_batchs}")
+        # print(f"Training Loss: {total_loss / total_batchs}")
 
         val_loss = 0
         total_batchs = 0
@@ -91,7 +91,7 @@ def train_model(
             val_loss += loss.item()
             total_batchs += 1
 
-        print(f"Validation Loss: {val_loss / total_batchs}")
+        # print(f"Validation Loss: {val_loss / total_batchs}")
 
     if file:
         path = os.path.join(os.getcwd(), "models", file)

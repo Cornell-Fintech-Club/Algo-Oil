@@ -1,11 +1,14 @@
+import numpy as np
 from model import (
     FFNN,
     format_dataloader,
     train_model,
     pred_model,
+    eval_model,
     save_model,
     load_model,
 )
+
 import torch.optim as optim
 import torch.nn as nn
 
@@ -27,14 +30,19 @@ test = format_dataloader("demand/cleaned-data/test.csv")
 models = []
 loss_fn = nn.L1Loss()
 preds = [0.0 for _ in range(10)]
+data = []
+loss = []
 
 if not model_file:
-    for n in range(5):
+    for n in range(30):
         model = FFNN(input_dim, hid_dim, final_dim, num_layers)
         optimizer = optim.SGD(model.parameters(), lr=lr)
         train_model(model, train + val, test, num_epochs, optimizer, loss_fn)
+        outputs, testloss = eval_model(model, test, loss_fn)
 
-        save_model(model, f"models/oil_ffnn_{n}.pth")
+        loss.append(testloss)
+        data.append(outputs)
+        save_model(model, f"demand/models/oil_ffnn_{n}.pth")
 
     #     preds[0] += pred_model(model, proj[1]["input"])
     #     for i in range(2, len(proj)):
@@ -60,3 +68,13 @@ else:
     #     preds[i] = preds[i] / 30
 
 # print(preds)
+
+
+# Define the file name
+file_name = "demand\outputs"
+file_name
+data = np.array(data)
+loss = np.array(loss)
+# Writing to CSV file
+np.savetxt(file_name + "\pred.csv", data, delimiter=",", fmt="%s")
+np.savetxt(file_name + "\loss.csv", loss, delimiter=",", fmt="%s")
