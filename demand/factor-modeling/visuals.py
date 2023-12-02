@@ -51,8 +51,8 @@ import matplotlib.dates as mdates
 
 
 #graph the actual crude oil production for August 2023 to May 2015 against the prediction model 
-prediction_df = pd.read_csv("../outputs/best_loss_data.csv")
-actual_crude_prod = pd.read_csv("../cleaned-data/test.csv")
+prediction_df = pd.read_csv("demand/outputs/best_loss_data.csv")
+actual_crude_prod = pd.read_csv("demand/cleaned-data/test.csv")
 prediction_df.drop("Unnamed: 0", axis = 1, inplace = True)
 prediction_df.columns = ['Predictions']
 
