@@ -35,12 +35,13 @@ preds = [0.0 for _ in range(10)]
 data = []
 loss = []
 val_loss = []
+train_loss = []
 
 if not model_file:
     for n in range(30):
         model = FFNN(input_dim, hid_dim, final_dim, num_layers)
         optimizer = optim.SGD(model.parameters(), lr=lr)
-        model, validation_loss = train_model(
+        model, training_loss, validation_loss = train_model(
             model, train + val, test, num_epochs, optimizer, loss_fn
         )
         outputs, testloss = eval_model(model, test, loss_fn)
@@ -48,6 +49,7 @@ if not model_file:
         loss.append(testloss)
         data.append(outputs)
         val_loss.append(validation_loss)
+        train_loss.append(training_loss)
         save_model(model, f"demand/models/oil_ffnn_{n}.pth")
 
     #     preds[0] += pred_model(model, proj[1]["input"])
@@ -81,15 +83,22 @@ file_name = "demand\outputs"
 data = np.array(data)
 loss = np.array(loss)
 val_loss = np.array(val_loss)
+train_loss = np.array(train_loss)
 avg_val_loss = []
+avg_train_loss = []
 
 df = pd.DataFrame(val_loss)
+df1 = pd.DataFrame(train_loss)
 val = df.mean(axis=0)
+train = df1.mean(axis=0)
 for i in range(30):
     avg_val_loss.append(val[i])
+    avg_train_loss.append(train[i])
 
 # Writing to CSV file
 avg_val_loss = np.array(avg_val_loss)
+avg_train_loss = np.array(avg_train_loss)
 np.savetxt(file_name + "\pred.csv", data, delimiter=",", fmt="%s")
 np.savetxt(file_name + "\loss.csv", loss, delimiter=",", fmt="%s")
 np.savetxt(file_name + "\loss_val.csv", avg_val_loss, delimiter=",", fmt="%s")
+np.savetxt(file_name + "\loss_train.csv", avg_train_loss, delimiter=",", fmt="%s")
