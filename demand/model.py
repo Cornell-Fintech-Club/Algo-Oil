@@ -58,6 +58,8 @@ def train_model(
 ):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
+    validation_loss = []
+    training_loss = []
 
     for epoch in range(num_epochs):
         print(f"Epoch {epoch}")
@@ -76,8 +78,8 @@ def train_model(
 
             loss.backward()
             optimizer.step()
-
         print(f"Training Loss: {total_loss / total_batchs}")
+        training_loss.append(total_loss.item() / total_batchs)
 
         val_loss = 0
         total_batchs = 0
@@ -91,13 +93,14 @@ def train_model(
             val_loss += loss.item()
             total_batchs += 1
 
-        print(f"Validation Loss: {val_loss / total_batchs}")
+        validation_loss.append(val_loss / total_batchs)
+        # print(f"Validation Loss: {val_loss / total_batchs}")
 
     if file:
         path = os.path.join(os.getcwd(), "models", file)
         model.save_pretrained(path)
 
-    return model
+    return model, training_loss, validation_loss
 
 
 def eval_model(model, test_dataloader, loss_fn):
