@@ -6,45 +6,55 @@ df = pd.read_csv("demand/initial-data/U.S._Exports_of_Finished_Petroleum_Product
 
 
 df = pd.read_csv("demand/initial-data/U.S._Exports_of_Finished_Petroleum_Products.csv")
-df[["Month", "Year"]] = df["Month Year "].str.split(" ", expand=True)
+df[["Month", "Year"]] = df["Month"].str.split(" ", expand=True)
 
 
-df.drop("Month Year ", axis=1, inplace=True)
+# df.drop("Month", axis=1, inplace=True)
 df = df[pd.to_numeric(df["Year"], errors="coerce") >= 1997]
+df = df[
+    [
+        "Year",
+        "Month",
+        "U.S. Exports of Finished Petroleum Products Thousand Barrels per Day",
+    ]
+]
 
 print(df)
 df.to_csv("demand/cleaned-data/cleaned_US_exports.csv", sep=",", index=False)
 
 
-cols = ["Letters", "Year", "Gallons per Vehicle", "Randint", "Desc", "Metric"]
-motordf = pd.read_csv("demand/initial-data/MER_T01_08.csv", names=cols)
-print(motordf["Year"].dtype)
-motordf["Year"] = motordf["Year"] // 100
+# cols = ["Letters", "Year", "Gallons per Vehicle", "Randint", "Desc", "Metric"]
+# motordf = pd.read_csv("demand/initial-data/MER_T01_08.csv", names=cols)
+# print(motordf["Year"].dtype)
+# motordf["Year"] = motordf["Year"] // 100
 
-finalmotordf = motordf[["Year", "Gallons per Vehicle"]]
-finalmotordf = finalmotordf[
-    pd.to_numeric(finalmotordf["Year"], errors="coerce") >= 1997
-]
-print(finalmotordf)
-finalmotordf.to_csv("demand/cleaned-data/cleaned_US_Fuel_Consumption.csv")
+# finalmotordf = motordf[["Year", "Gallons per Vehicle"]]
+# finalmotordf = finalmotordf[
+#     pd.to_numeric(finalmotordf["Year"], errors="coerce") >= 1997
+# ]
+# print(finalmotordf)
+# finalmotordf.to_csv("demand/cleaned-data/cleaned_US_Fuel_Consumption.csv")
 
 
 # cleaning data for monthly gasoline production
 
-gasoline_df = pd.read_csv("demand/initial-data/MGFUPUS1m.csv")
+gasoline_df = pd.read_csv(
+    "demand/initial-data/U.S._Product_Supplied_of_Finished_Motor_Gasoline.csv"
+)
 
 # Extract year and month
-gasoline_df[["Month", "Year"]] = gasoline_df["Date"].str.split("-", expand=True)
 
+gasoline_df[["Month", "Year"]] = gasoline_df["Month"].str.split(" ", expand=True)
 
-# Reorganize columns
 gasoline_df = gasoline_df[
     [
         "Year",
         "Month",
-        "U.S. Product Supplied of Finished Motor Gasoline (Thousand Barrels)",
+        "U.S. Product Supplied of Finished Motor Gasoline Thousand Barrels",
     ]
 ]
+# gasoline_df.drop("Month", axis=1, inplace=True)
+
 gasoline_df = gasoline_df[pd.to_numeric(gasoline_df["Year"], errors="coerce") >= 1997]
 gasoline_df.to_csv("demand/cleaned-data/cleaned_US_gasoline_production.csv")
 

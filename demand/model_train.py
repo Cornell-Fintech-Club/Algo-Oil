@@ -17,8 +17,8 @@ import torch.nn as nn
 model_file = False
 # proj_file = "proj_vals.csv"
 input_dim = 7
-hid_dim = 75
-final_dim = 20
+hid_dim = 150
+final_dim = 30
 num_layers = 5
 num_epochs = 30
 lr = 0.000001

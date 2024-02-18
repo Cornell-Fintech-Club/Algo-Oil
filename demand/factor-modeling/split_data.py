@@ -1,6 +1,6 @@
 import pandas as pd
 
-val_size, test_size = 100, 100
+val_size, test_size = 300, 100
 df = pd.read_csv("demand/cleaned-data/cleaned_final_TEST.csv")
 test = df.head(test_size)
 val = df.iloc[test_size : test_size + val_size]
