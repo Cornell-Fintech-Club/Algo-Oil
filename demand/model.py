@@ -38,7 +38,7 @@ def format_dataloader(file_path):
                 row["Month"],
                 row["Year"],
                 row[
-                    "U.S. Product Supplied of Finished Motor Gasoline (Thousand Barrels)"
+                    "U.S. Product Supplied of Finished Motor Gasoline Thousand Barrels"
                 ],
                 row["U.S. Electricity Consumption (billion kilowatthours per day)"],
                 row["U.S. Heating Degree Days (degree days)"],
