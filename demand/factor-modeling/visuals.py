@@ -1,3 +1,9 @@
+"""
+Generates a visual of how our predictions compare against our testing dataset,
+as well as the training and validation loss over epochs of training.
+"""
+
+# Imports
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -104,7 +110,7 @@ def val_loss_train_loss():
     )
 
     plt.xlabel("Epochs")
-    plt.ylabel("Loss")
+    plt.ylabel("Loss")  
     plt.legend()
     plt.title("Training and Validation Loss")
     plt.tight_layout()
