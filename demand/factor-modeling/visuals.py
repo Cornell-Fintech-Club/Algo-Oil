@@ -70,7 +70,7 @@ def prediction_model():
     print("Correlation Coefficient:", correlation)
 
     # Creating a date range with month frequency
-    date_range = pd.date_range(start="2015-05-01", end="2023-12-01", freq="MS")
+    date_range = pd.date_range(start="2017-09-01", end="2023-12-01", freq="MS")
 
     print(prediction_df)
     plt.figure(figsize=(13, 5.7))
@@ -81,8 +81,8 @@ def prediction_model():
     )
 
     plt.xticks(
-        range(0, len(newact.index) + 6, 6),
-        date_range[::6].strftime("%b %Y"),
+        range(0, len(newact.index), 4),
+        date_range[::4].strftime("%b %Y"),
         rotation=45,
     )
     plt.xlabel("Month and Day Data Points")
