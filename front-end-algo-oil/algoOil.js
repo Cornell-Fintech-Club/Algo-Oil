@@ -2,8 +2,6 @@ function toggleGraph(graphId) {
     var graph = document.getElementById(graphId);
     var isVisible = graph.style.display === 'block';
 
-    
-
     graph.style.display = isVisible ? 'none' : 'block';
     graph.classList.toggle('enlarged', true);
 
@@ -14,12 +12,12 @@ document.querySelectorAll('.graph-button').forEach(button => {
         document.querySelectorAll('.graph-container.enlarged').forEach(graph => {
             graph.classList.remove('enlarged');
             graph.style.display = 'none';
-
         });
         var graphID = this.getAttribute('data-graph');
         var originalData = this.getAttribute('original-data');
         var predictionData = this.getAttribute('prediction-data');
         toggleGraph(graphID);
+        console.log(originalData, predictionData, graphID);
         loadAndPlotData(originalData, predictionData, graphID);
     });
 });
@@ -60,11 +58,10 @@ function loadAndPlotData(original, prediction, graphId) {
                 y: unpack(predictionRows, 'yhat'),
                 line: { color: '#ff7f0e' } // red
             };
-
             var data = [originalTrace, predictionTrace];
 
             var layout = {
-                title: 'Predicted price',
+                title: 'Actual vs. Prediction',
                 xaxis: {
                     title: 'Date'
                 },

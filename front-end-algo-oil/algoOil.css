@@ -1,4 +1,5 @@
-body, html {
+body,
+html {
     margin: 0;
     padding: 0;
     height: 100%;
@@ -11,7 +12,8 @@ header {
 
 .banner {
     background-color: #CC0000;
-    color: white; /* Text color */
+    color: white;
+    /* Text color */
     padding: 20px 0;
 }
 
@@ -36,7 +38,7 @@ h1 {
     margin-left: -70px;
     font-size: 36px;
     font-family: 'Arial', sans-serif;
-    text-shadow: 4px 4px 8px rgba(0,0,0,0.1);
+    text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .content-container {
@@ -50,14 +52,14 @@ h1 {
     flex-basis: 20%;
     padding: 20px;
     background-color: #f0f0f0;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar {
     flex-basis: 20%;
     padding: 20px;
     background-color: #f0f0f0;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-left: auto;
 }
 
@@ -76,19 +78,31 @@ h1 {
     box-sizing: border-box;
 }
 
-#goButton {
+#goButton,
+#showMore,
+.bottom-buttons button {
     display: block;
     width: 100%;
     padding: 10px 0;
     background-color: #CC0000;
     color: white;
-    border: none;
+    border: 2px solid #990000;
+    /* Add border */
     cursor: pointer;
     margin-top: 10px;
+    border-radius: 5px;
+    /* Rounded corners */
+    transition: background-color 0.3s, border-color 0.3s;
+    /* Smooth transition */
 }
 
-#goButton:hover {
-    background-color: #CC0000;
+#goButton:hover,
+#showMore:hover,
+.bottom-buttons button:hover {
+    background-color: #A30000;
+    /* Darker shade on hover */
+    border-color: #770000;
+    /* Darker border on hover */
 }
 
 #itemList {
@@ -105,20 +119,6 @@ h1 {
     border-bottom: none;
 }
 
-#showMore {
-    display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
-    background-color: #CC0000;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-#showMore:hover {
-    background-color: #CC0000;
-}
-
 .bottom-buttons {
     text-align: center;
     padding: 20px;
@@ -127,52 +127,59 @@ h1 {
     right: 0;
     bottom: 0;
     background-color: #fff;
-    box-shadow: 0 -4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-around;
 }
 
 .bottom-buttons button {
-    margin: 0 80px;
+    margin: 0 10px;
     padding: 20px 40px;
     font-size: 18px;
     background-color: #CC0000;
-    color: white;
-    border: none;
+    color: red;
+    border: 2px solid #990000;
     cursor: pointer;
     border-radius: 5px;
+    transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
 }
 
 .bottom-buttons button:hover {
     background-color: #A30000;
+    border-color: #770000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.bottom-buttons {
-  display: flex;
-  justify-content: space-around;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-}
+
 
 .graph-button {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 150px;
-  height: 100px;
-  margin: 10px;
-  cursor: pointer;
-  position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 100px;
+    margin: 10px;
+    cursor: pointer;
+    position: relative;
+    border: 2px solid transparent;
+    /* Prepare for hover effect */
+    transition: border-color 0.3s, box-shadow 0.3s;
+    /* Smooth transition */
 }
 
+.graph-button:hover {
+    border-color: #990000;
+    /* Highlight border on hover */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    /* Soft shadow for emphasis */
+}
 
 .graph-button span {
-  position: absolute;
-  color: black;
-  font-size: 1em; 
+    position: absolute;
+    color: black;
+    font-size: 1em;
 }
-
 
 .graph-container {
     display: none;
@@ -196,4 +203,3 @@ h1 {
     height: auto;
     z-index: 100;
 }
-
