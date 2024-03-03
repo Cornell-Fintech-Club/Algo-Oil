@@ -50,39 +50,43 @@ import seaborn as sns
 # )
 # plt.show()
 
+
 def prediction_model():
-    #graph the actual crude oil production for August 2023 to May 2015 against the prediction model 
+    # graph the actual crude oil production for August 2023 to May 2015 against the prediction model
     prediction_df = pd.read_csv("demand/outputs/best_loss_data.csv")
     actual_crude_prod = pd.read_csv("demand/cleaned-data/test.csv")
-    prediction_df.drop("Unnamed: 0", axis = 1, inplace = True)
-    prediction_df.columns = ['Predictions']
+    prediction_df.drop("Unnamed: 0", axis=1, inplace=True)
+    prediction_df.columns = ["Predictions"]
 
-
-    #reverse the order so its not reverse chronological order 
+    # reverse the order so its not reverse chronological order
     newpred = prediction_df[::-1].reset_index(drop=True)
     # Reverse the order of rows in df2
     newact = actual_crude_prod[::-1].reset_index(drop=True)
-    newact = newact[['U.S. Crude Oil Production (million barrels per day)']]
+    newact = newact[["U.S. Crude Oil Production (million barrels per day)"]]
 
-    correlation = newpred["Predictions"].corr(newact['U.S. Crude Oil Production (million barrels per day)'])
+    correlation = newpred["Predictions"].corr(
+        newact["U.S. Crude Oil Production (million barrels per day)"]
+    )
     print("Correlation Coefficient:", correlation)
 
-
-
-
     # Creating a date range with month frequency
-    date_range = pd.date_range(start='2015-05-01', end='2023-08-01', freq='MS')
-
+    date_range = pd.date_range(start="2017-09-01", end="2023-12-01", freq="MS")
 
     print(prediction_df)
     plt.figure(figsize=(13, 5.7))
-    plt.plot(newpred['Predictions'], label='Predictions')
-    plt.plot(newact['U.S. Crude Oil Production (million barrels per day)'], label=' Actual U.S. Crude Oil Production')
+    plt.plot(newpred["Predictions"], label="Predictions")
+    plt.plot(
+        newact["U.S. Crude Oil Production (million barrels per day)"],
+        label=" Actual U.S. Crude Oil Production",
+    )
 
-
-    plt.xticks(range(0, len(newact.index), 7), date_range[::7].strftime('%b %Y'), rotation=45)
-    plt.xlabel('Month and Day Data Points')
-    plt.ylabel('U.S Crude Oil Prod (million barrels per day)')
+    plt.xticks(
+        range(0, len(newact.index), 4),
+        date_range[::4].strftime("%b %Y"),
+        rotation=45,
+    )
+    plt.xlabel("Month and Day Data Points")
+    plt.ylabel("U.S Crude Oil Prod (million barrels per day)")
     plt.legend()
     plt.show()
 
@@ -94,13 +98,15 @@ def val_loss_train_loss():
     plt.figure(figsize=(10, 6))
     sns.set(style="whitegrid")  # Set seaborn style
 
-    plt.plot(val_loss_df, label='Validation Loss', color='salmon', linestyle='-')
-    plt.plot(train_loss_df, label='Training Loss', color='cornflowerblue', linestyle='--')
+    plt.plot(val_loss_df, label="Validation Loss", color="salmon", linestyle="-")
+    plt.plot(
+        train_loss_df, label="Training Loss", color="cornflowerblue", linestyle="--"
+    )
 
-    plt.xlabel('Epochs')
-    plt.ylabel('Loss')
+    plt.xlabel("Epochs")
+    plt.ylabel("Loss")
     plt.legend()
-    plt.title('Training and Validation Loss')
+    plt.title("Training and Validation Loss")
     plt.tight_layout()
     plt.show()
 
@@ -111,7 +117,6 @@ def val_loss_train_loss():
     # plt.ylabel('Loss')
     # plt.legend()
     # plt.show()
-
 
 
 prediction_model()
