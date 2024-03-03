@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CFT Algo Oil</title>
+    <link rel="stylesheet" href="algoOil.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="banner"></div>
+        <div class="logo-and-name">
+            <img src="CFTLogo.png" alt="Logo" class="logo">
+            <h1>Algo Oil</h1>
+        </div>
+    </header>
+
+    <div class="content-container">
+        <div class="parameters-section">
+            <h2>Parameters</h2>
+            <input type="text" placeholder="Parameter 1">
+            <input type="text" placeholder="Parameter 2">
+            <input type="text" placeholder="Parameter 3">
+            <button id="goButton">Go</button>
+        </div>
+        <div class="sidebar">
+            <ul id="itemList">
+                <li>Item 1</li>
+                <li>Item 2</li>
+                <li>Item 3</li>
+                <li class="extraItem" style="display:none;">Item 4</li>
+                <li class="extraItem" style="display:none;">Item 5</li>
+            </ul>
+            <button id="showMore">Show More</button>
+        </div>
+    </div>
+    <div class="bottom-buttons">
+        <div class="graph-button" data-graph="supplyGraph" original-data="data/supply_data.csv", prediction-data="data/supply_output.csv">Supply</div>
+        <div class="graph-button" data-graph="demandGraph" original-data="data/demand_data.csv", prediction-data="data/demand_output.csv">Demand</div>
+        <div class="graph-button" data-graph="sentimentGraph" original-data="data/sentiment_data.csv", prediction-data="data/sentiment_output.csv">Sentiment</div>
+        
+        <div id="supplyGraph" class="graph-container"></div>
+        <div id="demandGraph" class="graph-container"></div>
+        <div id="sentimentGraph" class="graph-container"></div>
+    </div>
+
+
+    <script src="algoOil.js"></script>
+</body>
+</html>
