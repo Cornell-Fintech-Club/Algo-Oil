@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="algoOil.css">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
+
 <body>
     <header>
         <div class="banner"></div>
@@ -26,20 +28,29 @@
         </div>
         <div class="sidebar">
             <ul id="itemList">
-                <li>Item 1</li>
-                <li>Item 2</li>
-                <li>Item 3</li>
-                <li class="extraItem" style="display:none;">Item 4</li>
+                <li><a
+                        href="https://www.cnbc.com/2024/03/03/saudi-arabia-to-extend-1-million-barrel-per-day-crude-oil-output-cut-until-the-end-of-june.html">Saudi
+                        Arabia, Russia and several OPEC+ producers extend voluntary crude supply cuts until end of
+                        June</a></li>
+                <li><a href="https://www.cnbc.com/2024/03/01/crude-oil-today-wti-brent-jump-as-market-tightens.html">U.S.
+                        crude touches $80 for first time since November before OPEC+ decision</a></li>
+                <li><a
+                        href="https://www.cnbc.com/2024/02/28/chinas-oil-demand-growth-could-halve-from-pre-covid-levels.html">China’s
+                        oil demand growth could halve from pre-Covid levels as property, auto sectors struggle</a></li>
+                <li class=" extraItem" style="display:none;">Item 4</li>
                 <li class="extraItem" style="display:none;">Item 5</li>
             </ul>
             <button id="showMore">Show More</button>
         </div>
     </div>
     <div class="bottom-buttons">
-        <div class="graph-button" data-graph="supplyGraph" original-data="data/supply_data.csv", prediction-data="data/supply_output.csv">Supply</div>
-        <div class="graph-button" data-graph="demandGraph" original-data="data/demand_data.csv", prediction-data="data/demand_output.csv">Demand</div>
-        <div class="graph-button" data-graph="sentimentGraph" original-data="data/sentiment_data.csv", prediction-data="data/sentiment_output.csv">Sentiment</div>
-        
+        <div class="graph-button" data-graph="supplyGraph" original-data="data/supply_data.csv" ,
+            prediction-data="data/supply_output.csv">Supply</div>
+        <div class="graph-button" data-graph="demandGraph" original-data="data/demand_data.csv" ,
+            prediction-data="data/demand_output.csv">Demand</div>
+        <div class="graph-button" data-graph="sentimentGraph" original-data="data/sentiment_data.csv" ,
+            prediction-data="data/sentiment_output.csv">Sentiment</div>
+
         <div id="supplyGraph" class="graph-container"></div>
         <div id="demandGraph" class="graph-container"></div>
         <div id="sentimentGraph" class="graph-container"></div>
@@ -48,4 +59,5 @@
 
     <script src="algoOil.js"></script>
 </body>
+
 </html>
