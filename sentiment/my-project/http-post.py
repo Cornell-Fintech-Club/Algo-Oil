@@ -1,111 +1,79 @@
-# Package used to execute HTTP POST request to the API
+from datetime import datetime, timedelta
 import json
 import urllib.request
 import pandas as pd
 from dateutil import rrule
-from datetime import date, datetime, timedelta
 import time
-
-# curl -XPOST -H "Content-type: application/json" -d '{
-#     "type": "filterArticles",
-#     "queryString": "title:WTI OR description:WTI",
-#     "from": 0,
-#     "size": 50
-# }' 'https://api.newsfilter.io/public/actions?token=8a9ea1e0669e43cc8e3bf11bfde7883b83d6242d3ae34deaa6805dcb3242537f'
 
 # API endpoint
 API_KEY = '8a9ea1e0669e43cc8e3bf11bfde7883b83d6242d3ae34deaa6805dcb3242537f'
 API_ENDPOINT = "https://api.newsfilter.io/public/actions?token={}".format(API_KEY)
 
-def articles_perweek (queryString, titles, descriptions):
-  # Define the filter parameters
-  # queryString = "title:WTI OR title:oil OR description:WTI OR symbols:WTI AND publishedAt:[2021-01-01 TO 2023-11-11]"
-  # "symbols:NFLX AND publishedAt:[2020-02-01 TO 2020-05-20]"
+def collect_and_split_data(query_string, start_date, end_date):
+    titles = []
+    descriptions = []
+    dates = []
 
-  payload = {
-  "type": "filterArticles",
-  "queryString": queryString,
-  "from": 0,
-  "size": 8
-  # max size for one api call is 50
-  }
+    for dt in rrule.rrule(rrule.WEEKLY, dtstart=start_date, until=end_date):
+        dt_plusweek = dt + timedelta(days=7)
+        payload = {
+            "type": "filterArticles",
+            "queryString": query_string.format(dt.strftime('%Y-%m-%d'), dt_plusweek.strftime('%Y-%m-%d')),
+            "from": 0,
+            "size": 50
+        }
+        jsondata = json.dumps(payload)
+        jsondataasbytes = jsondata.encode('utf-8')
 
-  # Format your payload to JSON bytes
-  jsondata = json.dumps(payload)
-  jsondataasbytes = jsondata.encode('utf-8')
+        req = urllib.request.Request(API_ENDPOINT)
+        req.add_header('Content-Type', 'application/json; charset=utf-8')
+        req.add_header('Content-Length', len(jsondataasbytes))
 
-  # Instantiate the request
-  req = urllib.request.Request(API_ENDPOINT)
+        response = urllib.request.urlopen(req, jsondataasbytes)
+        res_body = response.read()
+        articles = json.loads(res_body.decode("utf-8"))
 
-  # Set the correct HTTP header: Content-Type = application/json
-  req.add_header('Content-Type', 'application/json; charset=utf-8')
-  # Set the correct length of your request
-  req.add_header('Content-Length', len(jsondataasbytes))
+        # API call
+        for article in articles['articles']:
+            titles.append(article['title'])
+            descriptions.append(article['description'])
+            try:
+                # parse with timezone offset
+                dates.append(datetime.strptime(article['publishedAt'], '%Y-%m-%dT%H:%M:%S%z').date())
+            except ValueError:
+                # otherwise parse as UTC time
+                dates.append(datetime.strptime(article['publishedAt'], '%Y-%m-%dT%H:%M:%S.%fZ').date())
+        time.sleep(1)
+    
+    # Split data based on date split
+    split_date = start_date + timedelta(days=int((end_date - start_date).days * 0.7))
+    train_data = pd.DataFrame({'Title': titles[:int(len(titles) * 0.7)], 'Description': descriptions[:int(len(descriptions) * 0.7)], 'Date': dates[:int(len(dates) * 0.7)]})
+    test_data = pd.DataFrame({'Title': titles[int(len(titles) * 0.7):], 'Description': descriptions[int(len(descriptions) * 0.7):], 'Date': dates[int(len(dates) * 0.7):]})
+    
+    return train_data, test_data
 
-  # Send the request to the API
-  response = urllib.request.urlopen(req, jsondataasbytes)
+# query strings
+wti_query_string = "title:WTI AND description:WTI AND publishedAt:[{} TO {}]"
+oil_query_string = "title:oil AND description:oil AND publishedAt:[{} TO {}]"
 
-  # Read the response
-  res_body = response.read()
-  # Transform the response into JSON
-  articles = json.loads(res_body.decode("utf-8"))
-  # Get titles only
-  a = articles['articles']
-  i = 0
-  while i < len(a):
-    article = a[i]
-    title = article['title']
-    description = article['description']
-    titles.append(title)
-    descriptions.append(description)
-    i = i + 1
-  
-  print(articles)
+# stard & end dates
+start_date = datetime(2023, 12, 1)
+end_date = datetime.now()
 
-  return titles, descriptions
+# WTI query
+wti_train_data, wti_test_data = collect_and_split_data(wti_query_string, start_date, end_date)
 
-# Run the function
-titles_train = []
-descriptions_train = []
-titles_test = []
-descriptions_test = []
+# oil query
+oil_train_data, oil_test_data = collect_and_split_data(oil_query_string, start_date, end_date)
 
-now = datetime.now()
-start = date(2022, 1, 1)
-train_end = now - timedelta(days=112)
+# merge
+train_combined = pd.concat([wti_train_data, oil_train_data]).sort_values(by='Date')
+test_combined = pd.concat([wti_test_data, oil_test_data]).sort_values(by='Date')
 
-# train
-for dt in rrule.rrule(rrule.WEEKLY, dtstart=start, until=train_end):
-  dt_plusweek = dt + timedelta(days=7)
-  queryString = "title:oil AND description:oil AND publishedAt:[" + dt.strftime('%Y-%m-%d') + " TO " + dt_plusweek.strftime('%Y-%m-%d') + "]"
-  titles_train, descriptions_train = articles_perweek(queryString, titles_train, descriptions_train)
-  time.sleep(1)
-  queryString1 = "title:WTI AND description:WTI AND publishedAt:[" + dt.strftime('%Y-%m-%d') + " TO " + dt_plusweek.strftime('%Y-%m-%d') + "]"
-  titles_train, descriptions_train = articles_perweek(queryString1, titles_train, descriptions_train)
-  time.sleep(1)
-  queryString2 = "title:petroleum AND description:petroleum AND publishedAt:[" + dt.strftime('%Y-%m-%d') + " TO " + dt_plusweek.strftime('%Y-%m-%d') + "]"
-  titles_train, descriptions_train = articles_perweek(queryString2, titles_train, descriptions_train)
-  time.sleep(1)
+# reoder
+train_combined = train_combined[['Date', 'Title', 'Description']]
+test_combined = test_combined[['Date', 'Title', 'Description']]
 
-# oil test
-for dt in rrule.rrule(rrule.WEEKLY, dtstart=train_end, until=now):
-  dt_plusweek = dt + timedelta(days=7)
-  queryString = "title:oil AND description:oil AND publishedAt:[" + dt.strftime('%Y-%m-%d') + " TO " + dt_plusweek.strftime('%Y-%m-%d') + "]"
-  titles_test, descriptions_test = articles_perweek(queryString, titles_test, descriptions_test)
-  time.sleep(1)
-  queryString1 = "title:WTI AND description:WTI AND publishedAt:[" + dt.strftime('%Y-%m-%d') + " TO " + dt_plusweek.strftime('%Y-%m-%d') + "]"
-  titles_test, descriptions_test = articles_perweek(queryString1, titles_test, descriptions_test)
-  time.sleep(1)
-  queryString2 = "title:petroleum AND description:petroleum AND publishedAt:[" + dt.strftime('%Y-%m-%d') + " TO " + dt_plusweek.strftime('%Y-%m-%d') + "]"
-  titles_test, descriptions_test = articles_perweek(queryString2, titles_test, descriptions_test)
-  time.sleep(1)
-#print(titles)
-
-# Export train to csv for annotations
-df1 = pd.DataFrame(descriptions_train, titles_train)
-df1.to_csv('atd_separate_reduced_train.csv')
-# article_titles_descriptions
-
-# Export test to csv for annotations
-df2 = pd.DataFrame(descriptions_test, titles_test)
-df2.to_csv('atd_separate_reduced_test.csv')
+# save
+train_combined.to_csv('train_oil.csv', index=False)
+test_combined.to_csv('test_oil.csv', index=False)
