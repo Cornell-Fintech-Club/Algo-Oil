@@ -10,27 +10,38 @@ import matplotlib.pyplot as plt
 X = pd.read_csv("USexportsofcrude.csv")
 
 
-
-
-X['Date'] = pd.to_datetime(X['Date'], format='%b %d, %Y')
-X['Year'] = X['Date'].dt.year
-X['Month'] = X['Date'].dt.month
-X = X.groupby(['Year', 'Month'])['Weekly U.S. Exports of Crude Oil  (Thousand Barrels per Day)'].mean().reset_index()
-X.rename(columns={'Weekly U.S. Exports of Crude Oil  (Thousand Barrels per Day)': 'Monthly Average Exports (Thousand Barrels per Day)'}, inplace=True)
+X["Date"] = pd.to_datetime(X["Date"], format="%b %d, %Y")
+X["Year"] = X["Date"].dt.year
+X["Month"] = X["Date"].dt.month
+X = (
+    X.groupby(["Year", "Month"])[
+        "Weekly U.S. Exports of Crude Oil  (Thousand Barrels per Day)"
+    ]
+    .mean()
+    .reset_index()
+)
+X.rename(
+    columns={
+        "Weekly U.S. Exports of Crude Oil  (Thousand Barrels per Day)": "Monthly Average Exports (Thousand Barrels per Day)"
+    },
+    inplace=True,
+)
 print(X)
 
 
-X['Date'] = pd.to_datetime(X['Year'].astype(int).astype(str) + '-' + X['Month'].astype(int).apply(lambda x: f'{x:02d}'))
-date = pd.DataFrame(X['Date'])
+X["Date"] = pd.to_datetime(
+    X["Year"].astype(int).astype(str)
+    + "-"
+    + X["Month"].astype(int).apply(lambda x: f"{x:02d}")
+)
+date = pd.DataFrame(X["Date"])
 print(date)
 
-del X['Date']
+del X["Date"]
 
 # date = X["Date"]
 # date = pd.to_datetime(date)
 # print(date)
-
-
 
 
 # X['YearMonth'] = X['Date'].dt.to_period('M')
@@ -44,11 +55,9 @@ del X['Date']
 # X = X.reset_index()
 
 
-
-
 Y = pd.read_csv("finishedmotorgasoline.csv")
 Y = pd.DataFrame(Y)
-Y = Y.drop('Date', axis=1)
+Y = Y.drop("Date", axis=1)
 
 Y.to_csv("Y_data.csv")
 date.to_csv("Dates.csv")
@@ -70,7 +79,7 @@ m, n = X.shape
 
 # # test set is 10%
 # # train set is 90%
-size = 0.5
+size = 0.9
 X_train = X.loc[: np.floor(m * size)]
 X_test = X.loc[np.floor(m * size) + 1 :]
 
@@ -105,46 +114,46 @@ print("Variance score: %.2f" % lr.score(X, Y))
 
 print(len(date))
 print(len(Y))
-# plt.xticks(rotation=45)
-# plt.plot_date(
-#     date,
-#     Y,
-#     fmt="ko-",
-#     xdate=True,
-#     ydate=False,
-#     label="Real value",
-#     ms=3,
-# )
+plt.xticks(rotation=45)
+plt.plot_date(
+    date,
+    Y,
+    fmt="ko-",
+    xdate=True,
+    ydate=False,
+    label="Real value",
+    ms=3,
+)
 
-# print(type(lr.predict(X_train)))
-# plt.plot_date(
-#     date_train,
-#     predict_train,
-#     fmt="o-",
-#     xdate=True,
-#     ydate=False,
-#     label="Predicted train",
-#     color="#0074D9",
-#     ms=3,
-# )
+print(type(lr.predict(X_train)))
+plt.plot_date(
+    date_train,
+    predict_train,
+    fmt="o-",
+    xdate=True,
+    ydate=False,
+    label="Predicted train",
+    color="#0074D9",
+    ms=3,
+)
 
-# plt.plot_date(
-#     date_test,
-#     predict_test,
-#     fmt="o-",
-#     xdate=True,
-#     ydate=False,
-#     label="Predicted test",
-#     color="#228B22",
-#     ms=3,
-# )
+plt.plot_date(
+    date_test,
+    predict_test,
+    fmt="o-",
+    xdate=True,
+    ydate=False,
+    label="Predicted test",
+    color="#228B22",
+    ms=3,
+)
 
 
-# plt.legend(loc="upper center")
-# plt.ylabel("U.S. Field Production of Crude Oil Thousand Barrels")
-# plt.title("Predicted US Supply of Crude Oil Based on OECD Supply")
-# plt.grid()
-# plt.show()
+plt.legend(loc="upper center")
+plt.ylabel("U.S. Field Production of Crude Oil Thousand Barrels")
+plt.title("Predicted US Supply of Crude Oil Based on OECD Supply")
+plt.grid()
+plt.show()
 
 
 ################################################
