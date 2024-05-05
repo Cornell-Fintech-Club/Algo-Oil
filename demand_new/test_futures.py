@@ -10,7 +10,6 @@ import matplotlib.pyplot as plt
 X = pd.read_csv("USexportsofcrude.csv")
 population = pd.read_csv("uspopulation.csv")
 electricity = pd.read_csv("electricity.csv")
-print(population)
 
 X["Date"] = pd.to_datetime(X["Date"], format="%b %d, %Y")
 X["Year"] = X["Date"].dt.year
@@ -34,8 +33,6 @@ X["Electricity"] = electricity["electricity"]
 X["Heating"] = electricity["heating"]
 X["Cooling"] = electricity["cooling"]
 
-print(X)
-
 
 X["Date"] = pd.to_datetime(
     X["Year"].astype(int).astype(str)
@@ -43,8 +40,10 @@ X["Date"] = pd.to_datetime(
     + X["Month"].astype(int).apply(lambda x: f"{x:02d}")
 )
 date = pd.DataFrame(X["Date"])
-print(date)
+X = X.iloc[:-1]
+print(X)
 
+print(date)
 del X["Date"]
 
 # date = X["Date"]
@@ -69,8 +68,15 @@ Y = Y.drop("Date", axis=1)
 
 Y.to_csv("Y_data.csv")
 date.to_csv("Dates.csv")
+Y = Y.iloc[1:]
+Y = Y.reset_index()
+Y = Y.drop("index", axis=1)
 
 print(Y)
+
+date = date.iloc[1:]
+date = date.reset_index()
+date = date.drop("index", axis=1)
 
 # Y[["Month", "Year"]] = Y["Month"].str.split(" ", expand=True)
 # Y["Year"] = Y["Year"].astype(int)
@@ -96,6 +102,8 @@ Y_test = Y.loc[np.floor(m * size) + 1 :]
 
 date_train = date.loc[: np.floor(m * size)]
 date_test = date.loc[np.floor(m * size) + 1 :]
+print(len(X_train))
+print(len(Y_train))
 
 # print(X_test)
 # print(X_train)
