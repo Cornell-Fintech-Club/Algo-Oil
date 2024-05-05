@@ -8,7 +8,9 @@ import matplotlib.pyplot as plt
 
 
 X = pd.read_csv("USexportsofcrude.csv")
-
+population = pd.read_csv("uspopulation.csv")
+electricity = pd.read_csv("electricity.csv")
+print(population)
 
 X["Date"] = pd.to_datetime(X["Date"], format="%b %d, %Y")
 X["Year"] = X["Date"].dt.year
@@ -26,6 +28,12 @@ X.rename(
     },
     inplace=True,
 )
+X["Value"] = population["Value"]
+X["Production"] = electricity["production"]
+X["Electricity"] = electricity["electricity"]
+X["Heating"] = electricity["heating"]
+X["Cooling"] = electricity["cooling"]
+
 print(X)
 
 
@@ -79,7 +87,7 @@ m, n = X.shape
 
 # # test set is 10%
 # # train set is 90%
-size = 0.9
+size = 0.95
 X_train = X.loc[: np.floor(m * size)]
 X_test = X.loc[np.floor(m * size) + 1 :]
 
@@ -98,8 +106,6 @@ date_test = date.loc[np.floor(m * size) + 1 :]
 lr = LinearRegression()
 
 # Train the model using the training sets
-print(X_train)
-print(Y_train)
 lr.fit(X_train, Y_train)
 predict_train = lr.predict(X_train)
 predict_test = lr.predict(X_test)
@@ -112,8 +118,6 @@ print("Residual sum of squares: %.2f" % np.mean((Y_predict - Y) ** 2))
 # Explained variance score: 1 is perfect prediction
 print("Variance score: %.2f" % lr.score(X, Y))
 
-print(len(date))
-print(len(Y))
 plt.xticks(rotation=45)
 plt.plot_date(
     date,
@@ -150,8 +154,8 @@ plt.plot_date(
 
 
 plt.legend(loc="upper center")
-plt.ylabel("U.S. Field Production of Crude Oil Thousand Barrels")
-plt.title("Predicted US Supply of Crude Oil Based on OECD Supply")
+plt.ylabel("U.S. Demand of Crude Oil")
+plt.title("Predicted US Demand of Crude Oil Modeled by Gasoline Supply")
 plt.grid()
 plt.show()
 
