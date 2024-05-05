@@ -24,11 +24,7 @@ print(X)
 Y = pd.read_csv("eia_year.csv")
 Y[["Month", "Year"]] = Y["Month"].str.split(" ", expand=True)
 Y["Year"] = Y["Year"].astype(int)
-Y = (
-    Y.groupby("Year")["U.S. Field Production of Crude Oil Thousand Barrels"]
-    .sum()
-    .reset_index()
-)
+Y = Y.groupby("Year")["production"].sum().reset_index()
 
 del Y["Year"]
 print(Y)
